@@ -42,8 +42,8 @@ jobs:
 
       - name: compare analysis
         run: |
-          docker run --rm -v ${{ github.workspace }}:/src -w /src ghcr.io/google/osv-scanner-action:v1.9.0 \
-            /root/osv-reporter --old=base.json --new=pr.json --output=DependenciesDiff.md --fail-on-vuln=true
+          docker run --rm -v ${{ github.workspace }}:/github/workspace -w /github/workspace --entrypoint /root/osv-reporter ghcr.io/google/osv-scanner-action:v1.9.0 \
+            --old=base.json --new=pr.json --output=DependenciesDiff.md --fail-on-vuln=true
 
       - name: Save differential report as artifact
         if: always()
