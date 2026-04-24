@@ -98,4 +98,5 @@ org.yaml:snakeyaml:2.5=compileClasspath,productionRuntimeClasspath,runtimeClassp
 tools.jackson.core:jackson-core:3.1.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath
 tools.jackson.core:jackson-databind:3.1.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath
 tools.jackson:jackson-bom:3.1.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath
+xerces:xercesImpl:2.3.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath
 empty=annotationProcessor,developmentOnly,testAndDevelopmentOnly,testAnnotationProcessor
