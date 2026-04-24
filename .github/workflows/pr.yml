@@ -44,8 +44,10 @@ jobs:
           old: base.json
           new: pr.json
           output: DependenciesDiff.md
+          fail-on-vulnerability: true
 
       - name: Save differential report as artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dependencies-diff-report
@@ -62,10 +64,10 @@ jobs:
           fetch-depth: 0
 
       - name: run semgrep (new code only)
-        run: semgrep scan --config .semgrep/ --baseline-commit ${{ github.event.pull_request.base.sha }} --sarif --output semgrep-pr.sarif
-        continue-on-error: true
-
+        run: semgrep scan --config .semgrep/ --baseline-commit ${{ github.event.pull_request.base.sha }} --sarif --output semgrep-pr.sarif --error
+        
       - name: Save differential report as artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: semgrep-diff-report
