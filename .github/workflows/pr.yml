@@ -41,10 +41,11 @@ jobs:
       - name: compare analysis
         uses: google/osv-scanner-action/osv-reporter-action@v1
         with:
-          old: base.json
-          new: pr.json
-          output: DependenciesDiff.md
-          fail-on-vuln: true
+          scan-args: |-
+            --old=base.json
+            --new=pr.json
+            --output=DependenciesDiff.md
+            --fail-on-vuln=true
 
       - name: Save differential report as artifact
         if: always()
