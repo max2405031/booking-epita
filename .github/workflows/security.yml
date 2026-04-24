@@ -1,0 +1,48 @@
+name: security
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Added daily schedule as per "Daily Security Pipeline" title
+
+permissions:
+  actions: read
+  security-events: write
+  contents: read
+
+jobs:
+  osv-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: run osv-scanner
+        uses: google/osv-scanner-action/osv-scanner-action@v1.9.0
+        with:
+          scan-args: |-
+            --format sarif
+            --output DependenciesAnalysisFull.sarif
+            ./
+        continue-on-error: true
+
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: DependenciesAnalysisFull.sarif
+
+  semgrep-scan:
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep:1.70.0 # Using a recent stable version since <HASH> was placeholder
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: run semgrep
+        run: semgrep scan --config .semgrep/ --sarif --output semgrep.sarif
+        continue-on-error: true
+
+      - name: Upload SARIF report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
