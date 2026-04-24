@@ -54,7 +54,7 @@ jobs:
   SemgrepAnalysis:
     runs-on: ubuntu-latest
     container:
-      image: returntocorp/semgrep:1.70.0
+      image: returntocorp/semgrep
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -64,6 +64,12 @@ jobs:
       - name: run semgrep (new code only)
         run: semgrep scan --config .semgrep/ --baseline-commit ${{ github.event.pull_request.base.sha }} --sarif --output semgrep-pr.sarif
         continue-on-error: true
+
+      - name: Save differential report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-diff-report
+          path: semgrep-pr.sarif
 
       - name: Upload SARIF report
         uses: github/codeql-action/upload-sarif@v4
